@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 using Dalamud.Game;
 using Dalamud.Game.Command;
 using Dalamud.Game.Gui;
@@ -70,117 +71,133 @@ namespace DalamudPluginProjectTemplate
 		[HelpMessage("Trying to Need on all items.")]
 		public void NeedCommand(string command, string args)
 		{
-			int needCount = 0;
-			int greedCount = 0;
-			for (int i = 0; i < LootItems.Count; i++)
+			new Thread(() =>
 			{
-				if (!LootItems[i].Rolled)
+				int needCount = 0;
+				int greedCount = 0;
+				for (int i = 0; i < LootItems.Count; i++)
 				{
-					if (LootItems[i].RollState == RollState.UpToNeed)
+					if (!LootItems[i].Rolled)
 					{
-						RollItem(RollOption.Need, i);
-						needCount++;
+						if (LootItems[i].RollState == RollState.UpToNeed)
+						{
+							RollItem(RollOption.Need, i);
+							needCount++;
+						}
+						else
+						{
+							RollItem(RollOption.Greed, i);
+							greedCount++;
+						}
 					}
-					else
-					{
-						RollItem(RollOption.Greed, i);
-						greedCount++;
-					}
+					Thread.Sleep(1500);
 				}
-			}
-			if (config.EnableChatLogMessage)
-			{
-				ChatGui.Print(new SeString(new List<Payload>
+				if (config.EnableChatLogMessage)
 				{
-					new TextPayload("Need "),
-					new UIForegroundPayload(575),
-					new TextPayload(needCount.ToString()),
-					new UIForegroundPayload(0),
-					new TextPayload(" item" + ((needCount > 1) ? "s" : "") + ", greed "),
-					new UIForegroundPayload(575),
-					new TextPayload(greedCount.ToString()),
-					new UIForegroundPayload(0),
-					new TextPayload(" item" + ((greedCount > 1) ? "s" : "") + ".")
-				}));
-			}
+					ChatGui.Print(new SeString(new List<Payload>
+					{
+						new TextPayload("Need "),
+						new UIForegroundPayload(575),
+						new TextPayload(needCount.ToString()),
+						new UIForegroundPayload(0),
+						new TextPayload(" item" + ((needCount > 1) ? "s" : "") + ", greed "),
+						new UIForegroundPayload(575),
+						new TextPayload(greedCount.ToString()),
+						new UIForegroundPayload(0),
+						new TextPayload(" item" + ((greedCount > 1) ? "s" : "") + ".")
+					}));
+				}
+			}).Start();
 		}
 
 		[Command("/greed")]
 		[HelpMessage("Greed all items.")]
 		public void GreedCommand(string command, string args)
 		{
-			int greedCount = 0;
-			for (int i = 0; i < LootItems.Count; i++)
+			new Thread(() =>
 			{
-				if (!LootItems[i].Rolled)
+				int greedCount = 0;
+				for (int i = 0; i < LootItems.Count; i++)
 				{
-					RollItem(RollOption.Greed, i);
-					greedCount++;
+					if (!LootItems[i].Rolled)
+					{
+						RollItem(RollOption.Greed, i);
+						greedCount++;
+					}
+					Thread.Sleep(1500);
 				}
-			}
-			if (config.EnableChatLogMessage)
-			{
-				ChatGui.Print(new SeString(new List<Payload>
+				if (config.EnableChatLogMessage)
 				{
-					new TextPayload("Greed "),
-					new UIForegroundPayload(575),
-					new TextPayload(greedCount.ToString()),
-					new UIForegroundPayload(0),
-					new TextPayload(" item" + ((greedCount > 1) ? "s" : "") + ".")
-				}));
-			}
+					ChatGui.Print(new SeString(new List<Payload>
+					{
+						new TextPayload("Greed "),
+						new UIForegroundPayload(575),
+						new TextPayload(greedCount.ToString()),
+						new UIForegroundPayload(0),
+						new TextPayload(" item" + ((greedCount > 1) ? "s" : "") + ".")
+					}));
+				}
+			}).Start();
 		}
 
 		[Command("/pass")]
 		[HelpMessage("Pass all item.")]
 		public void PassCommand(string command, string args)
 		{
-			int passCount = 0;
-			for (int i = 0; i < LootItems.Count; i++)
+			new Thread(() =>
 			{
-				if (!LootItems[i].Rolled)
+				int passCount = 0;
+				for (int i = 0; i < LootItems.Count; i++)
 				{
-					RollItem(RollOption.Pass, i);
-					passCount++;
+					if (!LootItems[i].Rolled)
+					{
+						RollItem(RollOption.Pass, i);
+						passCount++;
+					}
+					Thread.Sleep(1500);
 				}
-			}
-			if (config.EnableChatLogMessage)
-			{
-				ChatGui.Print(new SeString(new List<Payload>
+				if (config.EnableChatLogMessage)
 				{
-					new TextPayload("Pass "),
-					new UIForegroundPayload(575),
-					new TextPayload(passCount.ToString()),
-					new UIForegroundPayload(0),
-					new TextPayload(" item" + ((passCount > 1) ? "s" : "") + ".")
-				}));
-			}
+					ChatGui.Print(new SeString(new List<Payload>
+					{
+						new TextPayload("Pass "),
+						new UIForegroundPayload(575),
+						new TextPayload(passCount.ToString()),
+						new UIForegroundPayload(0),
+						new TextPayload(" item" + ((passCount > 1) ? "s" : "") + ".")
+					}));
+				}
+			}).Start();
 		}
 
 		[Command("/passall")]
 		[HelpMessage("Pass All, including bid items.")]
 		public void PassAllCommand(string command, string args)
 		{
-			int passCount = 0;
-			for (int i = 0; i < LootItems.Count; i++)
+			new Thread(() =>
 			{
-				if (LootItems[i].RolledState != RollOption.Pass)
+				int passCount = 0;
+				for (int i = 0; i < LootItems.Count; i++)
 				{
-					RollItem(RollOption.Pass, i);
-					passCount++;
+					if (LootItems[i].RolledState != RollOption.Pass)
+					{
+						RollItem(RollOption.Pass, i);
+						passCount++;
+					}
+					Thread.Sleep(1500);
 				}
-			}
-			if (config.EnableChatLogMessage)
-			{
-				ChatGui.Print(new SeString(new List<Payload>
+				if (config.EnableChatLogMessage)
 				{
-					new TextPayload("Pass all "),
-					new UIForegroundPayload(575),
-					new TextPayload(passCount.ToString()),
-					new UIForegroundPayload(0),
-					new TextPayload(" item" + ((passCount > 1) ? "s" : "") + ".")
-				}));
-			}
+					ChatGui.Print(new SeString(new List<Payload>
+					{
+						new TextPayload("Pass all "),
+						new UIForegroundPayload(575),
+						new TextPayload(passCount.ToString()),
+						new UIForegroundPayload(0),
+						new TextPayload(" item" + ((passCount > 1) ? "s" : "") + ".")
+					}));
+				}
+			}).Start();
 		}
 
 		public static T[] ReadArray<T>(IntPtr unmanagedArray, int length) where T : struct
