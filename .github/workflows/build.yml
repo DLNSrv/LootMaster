@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  PLUGIN_NAME: Kapture
+  PLUGIN_NAME: LootMaster
   PERSONAL_PLUGIN_REPO: DLNSrv/DalamudPluginRepo
 
 jobs:
