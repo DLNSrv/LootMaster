@@ -1,40 +1,40 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
-    <Platforms>x64</Platforms>
-    <LangVersion>preview</LangVersion>
-    <PlatformTarget>x64</PlatformTarget>
-    <AssemblyTitle>LootMaster</AssemblyTitle>
-    <Company>LalaNET</Company>
-    <Product>LootMaster</Product>
-    <ProjectGuid>{39691E35-C39D-4D6B-930A-0E85CAD29045}</ProjectGuid>
-    <FileVersion>1.0.0.0</FileVersion>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Nullable>enable</Nullable>
-    <UseWindowsForms>true</UseWindowsForms>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <DalamudLibPath>$(appdata)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
-  </PropertyGroup>
+    <PropertyGroup>
+        <Title>LootMaster</Title>
+		<Authors>akira0245</Authors>
+		<TargetFramework>net5.0-windows</TargetFramework>
+		<Platforms>x64</Platforms>
+		<LangVersion>9</LangVersion>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<Nullable>enable</Nullable>
+		<Deterministic>true</Deterministic>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+		<OutputPath>bin\$(Configuration)\</OutputPath>
+		<DalamudLibPath>$(appdata)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-			<DebugSymbols>true</DebugSymbols>
-			<DebugType>full</DebugType>
-			<Optimize>false</Optimize>
-			<OutputPath>bin\Debug\</OutputPath>
-			<DefineConstants>DEBUG;TRACE</DefineConstants>
-			<ErrorReport>prompt</ErrorReport>
-			<WarningLevel>4</WarningLevel>
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
+		<Optimize>false</Optimize>
+		<OutputPath>bin\Debug\</OutputPath>
+		<DefineConstants>DEBUG;TRACE</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-			<DebugType>pdbonly</DebugType>
-			<Optimize>true</Optimize>
-			<OutputPath>bin\Release\</OutputPath>
-			<DefineConstants>TRACE</DefineConstants>
-			<ErrorReport>prompt</ErrorReport>
-			<WarningLevel>4</WarningLevel>
+		<DebugType>pdbonly</DebugType>
+		<Optimize>true</Optimize>
+		<OutputPath>bin\Release\</OutputPath>
+		<DefineConstants>TRACE</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
     </PropertyGroup>
     
   <ItemGroup>
