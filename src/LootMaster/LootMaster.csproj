@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net5.0-windows</TargetFramework>
+    <Platforms>x64</Platforms>
     <LangVersion>preview</LangVersion>
     <PlatformTarget>x64</PlatformTarget>
     <AssemblyTitle>LootMaster</AssemblyTitle>
@@ -14,15 +15,26 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <DalamudLibPath>$(appdata)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
   </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-        <DebugType>full</DebugType>
-        <DefineConstants>DEBUG;TRACE</DefineConstants>
+			<DebugSymbols>true</DebugSymbols>
+			<DebugType>full</DebugType>
+			<Optimize>false</Optimize>
+			<OutputPath>bin\Debug\</OutputPath>
+			<DefineConstants>DEBUG;TRACE</DefineConstants>
+			<ErrorReport>prompt</ErrorReport>
+			<WarningLevel>4</WarningLevel>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <DebugType>pdbonly</DebugType>
+			<DebugType>pdbonly</DebugType>
+			<Optimize>true</Optimize>
+			<OutputPath>bin\Release\</OutputPath>
+			<DefineConstants>TRACE</DefineConstants>
+			<ErrorReport>prompt</ErrorReport>
+			<WarningLevel>4</WarningLevel>
     </PropertyGroup>
     
   <ItemGroup>
@@ -43,7 +55,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="ILRepack" Version="2.0.18" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="DalamudPackager" Version="2.1.6" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
@@ -51,4 +65,24 @@
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
+  <Target Name="MergeDeps" AfterTargets="Build">
+    <ItemGroup>
+      <InputAssemblies Include="$(TargetPath)" />
+      <InputAssemblies Include="$(TargetDir)*.dll" Exclude="$(TargetPath)" />
+      <DeleteFiles Include="$(TargetDir)*.dll" Exclude="$(TargetDir)$(TargetFileName)" />
+    </ItemGroup>
+    <Exec Command="$(PkgILRepack)\tools\ILRepack.exe /union /lib:$(DalamudLibPath) /out:$(TargetDir)$(TargetFileName) @(InputAssemblies, ' ')" />
+    <Delete Files="@(DeleteFiles)" />
+  </Target>
+  <Target Name="CopyToDevPlugins" AfterTargets="MergeDeps" Condition="'$(Configuration)' == 'Debug'">
+    <Exec Command="if not exist $(AppData)\XIVLauncher\devPlugins\$(TargetName) (mkdir $(AppData)\XIVLauncher\devPlugins\$(TargetName))" />
+    <Exec Command="copy $(TargetDir)$(TargetFileName) $(AppData)\XIVLauncher\devPlugins\$(TargetName)\$(TargetFileName)" />
+    <Exec Command="copy $(TargetDir)*.pdb $(AppData)\XIVLauncher\devPlugins\$(TargetName)" />
+  </Target>
+  <Target Name="Cleanup" AfterTargets="MergeDeps" Condition=" '$(Configuration)' == 'Release' ">
+    <ItemGroup>
+      <DeleteFiles Include="$(TargetDir)*.xml;$(TargetDir)*.json;$(TargetDir)*.pdb" />
+    </ItemGroup>
+    <Delete Files="@(DeleteFiles)" />
+  </Target>
 </Project>
