@@ -1,0 +1,7 @@
+name: LootMaster
+author: akira0245
+punchline: Roll loots via text command.
+description: |-
+    Roll loots via text command.
+repo_url: https://github.com/DLNSrv/LootMaster
+dalamud_api_level: 6
